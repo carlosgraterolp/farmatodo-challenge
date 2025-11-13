@@ -4,10 +4,12 @@ import React, { useRef, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import SignupForm from "@/components/signup-form";
+import LoginForm from "@/components/login-form";
 
 export default function Authentication() {
   const containerRef = useRef<HTMLDivElement>(null);
   const parentRef = useRef<HTMLDivElement>(null);
+  const [isLogin, setIsLogin] = useState(true);
 
   return (
     <div
@@ -65,7 +67,11 @@ export default function Authentication() {
           ref={containerRef}
           className="mx-auto w-full max-w-md rounded-[24px] border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-black"
         >
-          <SignupForm />
+          {isLogin ? (
+            <LoginForm onToggle={() => setIsLogin(false)} />
+          ) : (
+            <SignupForm onToggle={() => setIsLogin(true)} />
+          )}
         </div>
       </div>
     </div>

@@ -4,9 +4,28 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const parentRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if customer is logged in
+    const customer = localStorage.getItem("customer");
+    setIsLoggedIn(!!customer);
+  }, []);
+
+  const handleAuth = () => {
+    if (isLoggedIn) {
+      localStorage.removeItem("customer");
+      setIsLoggedIn(false);
+    } else {
+      router.push("/auth");
+    }
+  };
 
   return (
     <div
@@ -57,31 +76,32 @@ export default function Home() {
 
       <h2 className="relative z-50 mx-auto mt-4 mb-4 max-w-4xl text-center text-3xl font-semibold tracking-tight text-balance text-gray-700 md:text-7xl dark:text-neutral-300">
         <Balancer>
-          Idea to website in minutes,{" "}
+          Tu farmacia en línea,{" "}
           <div className="relative mx-auto inline-block w-max [filter:drop-shadow(0px_1px_3px_rgba(27,_37,_80,_0.14))]">
             <div className="text-black [text-shadow:0_0_rgba(0,0,0,0.1)] dark:text-white">
-              <span className="">not hours.</span>
+              <span className="">siempre disponible.</span>
             </div>
           </div>
         </Balancer>
       </h2>
       <p className="relative z-50 mx-auto mt-4 max-w-lg px-4 text-center text-base/6 text-gray-600 dark:text-gray-200">
-        Get the best beam tracking services in the world with our state of the
-        art, cutting edge beam detection technology.
+        Compra tus productos farmacéuticos de forma rápida y segura. Entrega a domicilio en toda Venezuela.
       </p>
       <div className="mt-8 mb-10 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
         <Link
-          href="#"
-          className="group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-black p-px px-4 py-2 text-center text-sm leading-6 font-semibold text-white no-underline transition duration-200 sm:w-52 dark:bg-white dark:text-black"
+          href="/tienda"
+          className="group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-orange-500 p-px px-4 py-2 text-center text-sm leading-6 font-semibold text-white no-underline transition duration-200 hover:bg-orange-600 sm:w-52"
         >
-          Buy now
+          Ir a la tienda
         </Link>
-        <Link
-          href="/pricing"
-          className="shadow-input group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-white p-px px-4 py-2 text-sm leading-6 font-semibold text-black no-underline transition duration-200 hover:-translate-y-0.5 sm:w-52 dark:bg-neutral-800 dark:text-white"
-        >
-          Explore beams
-        </Link>
+        {!isLoggedIn && (
+          <Link
+            href="/auth"
+            className="shadow-input group relative z-20 flex h-10 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-white p-px px-4 py-2 text-sm leading-6 font-semibold text-black no-underline transition duration-200 hover:-translate-y-0.5 sm:w-52 dark:bg-neutral-800 dark:text-white"
+          >
+            Registrarse
+          </Link>
+        )}
       </div>
       <div
         ref={containerRef}
