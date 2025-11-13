@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
+import type { Transition } from "framer-motion";
 import Image from "next/image";
 import DottedMap from "dotted-map";
 import {
@@ -479,7 +480,7 @@ const OrbitingIcons = ({
               }}
               initial={icon.animation.initial}
               animate={icon.animation.animate}
-              transition={icon.animation.transition}
+              transition={icon.animation.transition as Transition}
             >
               <div
                 style={{
@@ -491,7 +492,9 @@ const OrbitingIcons = ({
                 <motion.div
                   initial={icon.animation.counterRotation.initial}
                   animate={icon.animation.counterRotation.animate}
-                  transition={icon.animation.counterRotation.transition}
+                  transition={
+                    icon.animation.counterRotation.transition as Transition
+                  }
                   className="w-8 h-8 rounded-full bg-gray-700 p-2 flex items-center justify-center border-[0.7px] border-[#E4E4E4] bg-gradient-to-b mix-blend-luminosity shadow-[inset_0px_0px_8px_0px_rgba(248,248,248,0.25)] drop-shadow-[0px_4px_6px_rgba(0,0,0,0.10)]  will-change-transform"
                 >
                   {orbits[orbitIndex].icons[iconIndex]}
