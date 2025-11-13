@@ -30,13 +30,44 @@ export async function registerCustomer(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-API-KEY": API_KEY, // 👈 AQUI se envía
     },
     body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
     let errorMessage = `Error al registrarse. Código ${res.status}`;
+    try {
+      const data = await res.json();
+      if (data.message) {
+        errorMessage = data.message;
+      }
+    } catch {
+      // ignore parse error
+    }
+    throw new Error(errorMessage);
+  }
+
+  return (await res.json()) as CustomerResponse;
+}
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export async function loginCustomer(
+  payload: LoginPayload
+): Promise<CustomerResponse> {
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    let errorMessage = `Error al iniciar sesión. Código ${res.status}`;
     try {
       const data = await res.json();
       if (data.message) {
