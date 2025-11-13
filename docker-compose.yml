@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: reto-farmatodo-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Seguridad
+      APP_API_KEY: "SECRET123"
+      # Clave de cifrado (16 chars → AES-128 DEMO)
+      ENCRYPTION_SECRET: "1234567890123456"
+      # Simulación de token/pago
+      TOKENIZATION_REJECTION_PERCENTAGE: "0"
+      PAYMENT_REJECTION_PERCENTAGE: "35"
+      PAYMENT_MAX_RETRIES: "3"
+      # Productos
+      PRODUCT_MIN_STOCK: "0"
+      # Consola H2
+      SPRING_H2_CONSOLE_ENABLED: "true"
+      # Logs útiles
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: "DEBUG"
+      LOGGING_LEVEL_ORG_HIBERNATE_SQL: "DEBUG"
