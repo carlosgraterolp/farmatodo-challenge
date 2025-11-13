@@ -104,10 +104,13 @@ export function FarmatodoSimulator() {
           )
           .join(", ")}`
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message ?? "Error desconocido");
-      pushLog("❌ Ocurrió un error. Revisa detalles arriba.");
+
+      const message = err instanceof Error ? err.message : "Error desconocido";
+
+      setError(message);
+      pushLog(`❌ Ocurrió un error. Revisa detalles arriba. (${message})`);
     } finally {
       setLoading(false);
     }
