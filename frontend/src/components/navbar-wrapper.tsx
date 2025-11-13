@@ -78,7 +78,7 @@ export function NavbarWrapper() {
   const navItems = [
     {
       name: "",
-      link: "/tienda",
+      link: "/store",
       icon: <IconShoppingBag />,
     },
     {
