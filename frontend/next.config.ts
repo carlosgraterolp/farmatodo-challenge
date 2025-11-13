@@ -1,13 +1,7 @@
 import type { NextConfig } from "next";
-import { withContentCollections } from "@content-collections/next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      { hostname: "assets.aceternity.com" },
-      { hostname: "images.unsplash.com" },
-    ],
-  },
+  /* config options here */
 };
 
-export default withContentCollections(nextConfig);
+export default nextConfig;
