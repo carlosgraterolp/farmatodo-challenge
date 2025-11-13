@@ -15,6 +15,7 @@ import {
   IconLock,
 } from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 interface Product {
   id: number;
@@ -256,12 +257,15 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="text-center">
-          <div className="mb-4 inline-block animate-spin rounded-full h-8 w-8 border-4 border-neutral-300 border-t-neutral-800 dark:border-neutral-700 dark:border-t-neutral-200"></div>
-          <p className="text-neutral-600 dark:text-neutral-400">Cargando...</p>
+      <>
+        <AuroraBackground className="overflow-hidden -z-10" />
+        <div className="relative flex min-h-screen items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 inline-block animate-spin rounded-full h-8 w-8 border-4 border-neutral-300 border-t-neutral-800 dark:border-neutral-700 dark:border-t-neutral-200"></div>
+            <p className="text-neutral-600 dark:text-neutral-400">Cargando...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -271,13 +275,15 @@ export default function CheckoutPage() {
 
   if (success && orderDetails) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <>
+        <AuroraBackground className="overflow-hidden -z-10" />
+        <div className="relative min-h-screen">
+          <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl bg-white p-8 shadow-md dark:bg-neutral-900"
+            className="rounded-2xl bg-white p-8 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50"
           >
             <div className="mb-6 text-center">
               <motion.div
@@ -305,7 +311,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="space-y-6 border-t border-neutral-200 pt-6 dark:border-neutral-700">
-              <div className="rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800">
+              <div className="rounded-lg bg-neutral-50 p-4 dark:bg-zinc-800/80 dark:backdrop-blur-sm dark:border dark:border-zinc-800/30">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-neutral-600 dark:text-neutral-400">
@@ -335,7 +341,7 @@ export default function CheckoutPage() {
               </div>
 
               {orderDetails.attempts && orderDetails.attempts.length > 0 && (
-                <div className="rounded-lg bg-neutral-50 p-4 dark:bg-neutral-800">
+                <div className="rounded-lg bg-neutral-50 p-4 dark:bg-zinc-800/80 dark:backdrop-blur-sm dark:border dark:border-zinc-800/30">
                   <h3 className="mb-3 text-sm font-semibold text-neutral-800 dark:text-neutral-100">
                     Intentos de pago:
                   </h3>
@@ -343,7 +349,7 @@ export default function CheckoutPage() {
                     {orderDetails.attempts.map((attempt: any, idx: number) => (
                       <div
                         key={idx}
-                        className="rounded-lg bg-white p-3 dark:bg-neutral-900"
+                        className="rounded-lg bg-white p-3 dark:bg-zinc-900/90 dark:backdrop-blur-sm dark:border dark:border-zinc-800/30"
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
@@ -389,7 +395,7 @@ export default function CheckoutPage() {
                 </p>
                 <button
                   onClick={() => router.push("/store")}
-                  className="mt-4 rounded-md bg-white px-6 py-3 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-neutral-800 dark:text-white"
+                  className="mt-4 rounded-md bg-white px-6 py-3 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
                 >
                   <IconShoppingBag className="mr-2 inline h-4 w-4" />
                   Volver a la tienda
@@ -399,12 +405,16 @@ export default function CheckoutPage() {
           </motion.div>
         </div>
       </div>
+      </div>
+    </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <>
+      <AuroraBackground className="overflow-hidden -z-10" />
+      <div className="relative min-h-screen">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <motion.div
@@ -424,7 +434,7 @@ export default function CheckoutPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             onClick={() => router.push("/cart")}
-            className="flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-neutral-800 dark:text-white"
+            className="flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
           >
             <IconArrowLeft className="h-4 w-4" />
             Volver al carrito
@@ -439,9 +449,9 @@ export default function CheckoutPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-2"
           >
-            <div className="rounded-2xl bg-white p-6 shadow-md dark:bg-neutral-900">
+            <div className="rounded-2xl bg-white p-6 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50">
               <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-zinc-800/80 dark:border dark:border-zinc-700/30">
                   <IconCreditCard className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
                 </div>
                 <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
@@ -548,7 +558,7 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={processing}
-                  className="w-full rounded-md bg-white px-6 py-4 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:bg-neutral-800 dark:text-white"
+                  className="w-full rounded-md bg-white px-6 py-4 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
                 >
                   {processing ? (
                     <span className="flex items-center justify-center gap-2">
@@ -587,9 +597,9 @@ export default function CheckoutPage() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="flex gap-3 rounded-lg bg-neutral-50 p-3 dark:bg-neutral-800"
+                      className="flex gap-3 rounded-lg bg-neutral-50 p-3 dark:bg-zinc-800/80 dark:backdrop-blur-sm dark:border dark:border-zinc-800/30"
                     >
-                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-700">
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-zinc-800/80 dark:border dark:border-zinc-700/30">
                         <img
                           src={getImageUrl(item.product.name)}
                           alt={item.product.name}
@@ -639,6 +649,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

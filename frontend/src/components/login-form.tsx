@@ -47,7 +47,7 @@ export default function LoginForm({ onToggle }: { onToggle: () => void }) {
   };
 
   return (
-    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+    <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50">
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
         Bienvenido de vuelta
       </h2>

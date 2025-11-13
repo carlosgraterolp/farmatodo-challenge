@@ -79,7 +79,7 @@ export function ExpandableProductCard({
             layoutId={`card-${product.id}`}
             ref={ref}
             key={product.id}
-            className="max-w-md rounded-2xl bg-white shadow-xl dark:bg-neutral-900 overflow-hidden"
+            className="max-w-md rounded-2xl bg-white shadow-xl dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50 overflow-hidden"
           >
             <div className="relative">
               <motion.div layoutId={`image-${product.id}`}>
@@ -93,7 +93,7 @@ export function ExpandableProductCard({
               </motion.div>
               <button
                 onClick={() => setActive(false)}
-                className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 backdrop-blur-sm text-neutral-700 shadow-md transition-all hover:bg-white hover:scale-110 dark:bg-neutral-800/95 dark:text-neutral-200 dark:hover:bg-neutral-800"
+                className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 backdrop-blur-sm text-neutral-700 shadow-md transition-all hover:bg-white hover:scale-110 dark:bg-zinc-800/90 dark:text-neutral-200 dark:hover:bg-zinc-700/90 dark:border dark:border-zinc-700/50"
                 aria-label="Cerrar"
               >
                 <svg
@@ -155,7 +155,7 @@ export function ExpandableProductCard({
                       <button
                         onClick={() => handleQuantityChange(-1)}
                         disabled={quantity <= 1}
-                        className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-neutral-300 bg-white text-xl font-semibold text-neutral-700 transition-all hover:bg-neutral-50 hover:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-neutral-300 bg-white text-xl font-semibold text-neutral-700 transition-all hover:bg-neutral-50 hover:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-neutral-300 dark:hover:bg-zinc-700/80"
                         aria-label="Disminuir cantidad"
                       >
                         −
@@ -169,12 +169,12 @@ export function ExpandableProductCard({
                           const val = parseInt(e.target.value) || 1;
                           setQuantity(Math.max(1, Math.min(product.stock, val)));
                         }}
-                        className="h-11 w-24 rounded-lg border-2 border-neutral-300 px-3 text-center text-lg font-semibold focus:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500/20 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:focus:border-neutral-400"
+                        className="h-11 w-24 rounded-lg border-2 border-neutral-300 px-3 text-center text-lg font-semibold focus:border-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-500/20 dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-white dark:focus:border-zinc-600"
                       />
                       <button
                         onClick={() => handleQuantityChange(1)}
                         disabled={quantity >= product.stock}
-                        className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-neutral-300 bg-white text-xl font-semibold text-neutral-700 transition-all hover:bg-neutral-50 hover:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
+                        className="flex h-11 w-11 items-center justify-center rounded-lg border-2 border-neutral-300 bg-white text-xl font-semibold text-neutral-700 transition-all hover:bg-neutral-50 hover:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-neutral-300 dark:hover:bg-zinc-700/80"
                         aria-label="Aumentar cantidad"
                       >
                         +
@@ -183,7 +183,7 @@ export function ExpandableProductCard({
                     <button
                       onClick={handleAddToCart}
                       disabled={product.stock === 0}
-                      className="flex-1 rounded-md bg-white px-6 py-3 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-800 dark:text-white"
+                      className="flex-1 rounded-md bg-white px-6 py-3 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
                     >
                       {product.stock === 0 ? "Sin stock" : "Agregar al carrito"}
                     </button>
@@ -199,7 +199,7 @@ export function ExpandableProductCard({
         layoutId={`card-${product.id}`}
         onClick={() => setActive(true)}
         key={product.id}
-        className="cursor-pointer rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg dark:bg-neutral-900"
+        className="cursor-pointer rounded-2xl bg-white shadow-md transition-shadow hover:shadow-lg dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50"
       >
         <motion.div layoutId={`image-${product.id}`}>
           <img
@@ -230,7 +230,7 @@ export function ExpandableProductCard({
 }
 
 export const useOutsideClick = (
-  ref: React.RefObject<HTMLDivElement>,
+  ref: React.RefObject<HTMLDivElement | null>,
   callback: Function,
 ) => {
   useEffect(() => {

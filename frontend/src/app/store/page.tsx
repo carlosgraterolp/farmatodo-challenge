@@ -6,6 +6,7 @@ import { ExpandableProductCard } from "@/components/ui/expandable-product-card";
 import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 interface Product {
   id: number;
@@ -129,8 +130,10 @@ export default function StorePage() {
   }, [cart]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <>
+      <AuroraBackground className="overflow-hidden -z-10" />
+      <div className="relative min-h-screen">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
           <div className="relative">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500">
@@ -174,7 +177,8 @@ export default function StorePage() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -187,7 +191,7 @@ function ProductCardSkeleton() {
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
       layout
-      className="rounded-2xl bg-white shadow-md dark:bg-neutral-900"
+      className="rounded-2xl bg-white shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50"
     >
       {/* Image skeleton */}
       <motion.div

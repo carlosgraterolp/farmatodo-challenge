@@ -43,7 +43,7 @@ export function CenteredWithLogo() {
   ];
 
   return (
-    <div className="relative w-full overflow-hidden border-t border-neutral-100 bg-white px-8 py-20 dark:border-white/[0.1] dark:bg-neutral-950">
+    <div className="relative w-full overflow-hidden border-t border-neutral-100 bg-white px-8 py-20 dark:border-zinc-800/50 dark:bg-zinc-900/95 dark:backdrop-blur-md">
       <div className="mx-auto max-w-7xl items-start justify-between text-sm text-neutral-500 md:px-8">
         <div className="relative flex w-full flex-col items-center justify-center">
           <div className="mr-0 mb-4 md:mr-4 md:flex">

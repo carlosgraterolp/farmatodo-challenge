@@ -90,7 +90,7 @@ export function NavbarWrapper() {
   ];
 
   return (
-    <div className="sticky top-0 left-0 right-0 z-50 w-full bg-white/95 backdrop-blur-sm dark:bg-neutral-950/95 py-2">
+    <div className="sticky top-0 left-0 right-0 z-50 w-full pt-2 pb-0">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>

@@ -135,13 +135,15 @@ export default function Home() {
             revealText={
               <p className="mx-auto max-w-4xl text-center text-4xl font-bold text-slate-800 dark:text-white">
                 Compra tus productos farmacéuticos de forma rápida y segura.
-                Entrega a domicilio en toda Venezuela.
+                Entrega a domicilio en toda Venezuela. ¡Tu salud más cerca, en
+                solo unos clics!
               </p>
             }
             className="h-[40rem] w-full rounded-none border-0 text-white dark:text-black"
           >
-            Compra tus productos farmacéuticos de forma rápida y segura. Entrega
-            a domicilio en toda Venezuela.
+            Descubre tu farmacia inteligente: consulta productos actualizados en
+            tiempo real, añade al carrito, paga de forma segura y recibe tu
+            compra directo en tu puerta. Gestiona pedidos, recibe notificaciones
           </MaskContainer>
         </div>
       </div>
