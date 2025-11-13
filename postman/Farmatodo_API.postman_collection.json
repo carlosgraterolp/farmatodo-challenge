@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "farmatodo-api-2024",
+		"name": "Farmatodo API Collection",
+		"description": "Complete API collection for Farmatodo Challenge E-commerce Platform\n\nThis collection includes all endpoints for:\n- Product catalog and search\n- Order creation and management\n- User order history\n- Health checks\n\n**Authentication:** Most endpoints require an X-API-Key header.\n\n**Base URLs:**\n- Local: http://localhost:8080\n- GCP Cloud Run: https://farmatodo-backend-o7qbkd6ghq-uc.a.run.app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Actuator Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/actuator/health",
+							"host": ["{{BASE_URL}}"],
+							"path": ["actuator", "health"]
+						},
+						"description": "Spring Boot Actuator health endpoint. No authentication required.\n\nReturns the health status of the application including database connectivity."
+					},
+					"response": []
+				}
+			],
+			"description": "Health check endpoints for monitoring service availability"
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "List All Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/products",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Retrieve all products in the catalog.\n\n**Authentication:** Required (X-API-Key header)\n\n**Response:** Array of products with id, name, description, price, and stock."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/products/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "products", "1"]
+						},
+						"description": "Get details of a specific product by ID.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- id: Product ID (integer)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Aspirin 500mg\",\n  \"description\": \"Pain reliever and fever reducer\",\n  \"price\": 9.99,\n  \"stock\": 100\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/products",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Create a new product in the catalog.\n\n**Authentication:** Required (X-API-Key header)\n\n**Request Body:**\n```json\n{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"price\": number,\n  \"stock\": integer\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Aspirin 500mg (Updated)\",\n  \"description\": \"Pain reliever and fever reducer - Extra strength\",\n  \"price\": 12.99,\n  \"stock\": 150\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/products/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "products", "1"]
+						},
+						"description": "Update an existing product.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- id: Product ID to update"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/products/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "products", "1"]
+						},
+						"description": "Delete a product from the catalog.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- id: Product ID to delete"
+					},
+					"response": []
+				}
+			],
+			"description": "Product catalog management endpoints"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Create Order with Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"customer@example.com\",\n  \"cardNumber\": \"4532015112830366\",\n  \"cardHolder\": \"JOHN DOE\",\n  \"cvv\": \"123\",\n  \"expirationDate\": \"12/25\",\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"quantity\": 2\n    },\n    {\n      \"productId\": 2,\n      \"quantity\": 1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/orders",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "orders"]
+						},
+						"description": "Create a new order with payment processing.\n\n**Authentication:** Required (X-API-Key header)\n\n**Process:**\n1. Validates product availability and stock\n2. Tokenizes credit card information\n3. Processes payment (with retry logic)\n4. Creates order and deducts stock\n5. Sends confirmation email\n\n**Request Body:**\n```json\n{\n  \"email\": \"string\",\n  \"cardNumber\": \"string (16 digits)\",\n  \"cardHolder\": \"string\",\n  \"cvv\": \"string (3-4 digits)\",\n  \"expirationDate\": \"string (MM/YY)\",\n  \"items\": [\n    {\n      \"productId\": integer,\n      \"quantity\": integer (min: 1)\n    }\n  ]\n}\n```\n\n**Test Card Numbers:**\n- Visa: 4532015112830366\n- Mastercard: 5425233430109903\n- Amex: 374245455400126"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/orders/1",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "orders", "1"]
+						},
+						"description": "Retrieve order details by order ID.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- id: Order ID\n\n**Response includes:**\n- Order information\n- Order items with product details\n- Payment status\n- Total amount"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Orders by Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/orders/user/customer@example.com",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "orders", "user", "customer@example.com"]
+						},
+						"description": "Get all orders for a specific user by email address.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- email: User email address\n\n**Response:** Array of orders for the user"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{API_KEY}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"SHIPPED\"\n}"
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/orders/1/status",
+							"host": ["{{BASE_URL}}"],
+							"path": ["api", "orders", "1", "status"]
+						},
+						"description": "Update the status of an order.\n\n**Authentication:** Required (X-API-Key header)\n\n**Path Parameters:**\n- id: Order ID\n\n**Request Body:**\n```json\n{\n  \"status\": \"PENDING | PAID | SHIPPED | DELIVERED | CANCELLED\"\n}\n```\n\n**Valid Status Values:**\n- PENDING: Order created, payment pending\n- PAID: Payment successful\n- SHIPPED: Order shipped to customer\n- DELIVERED: Order delivered\n- CANCELLED: Order cancelled"
+					},
+					"response": []
+				}
+			],
+			"description": "Order management and payment processing endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "API_KEY",
+			"value": "SECRET123",
+			"type": "string"
+		}
+	]
+}
