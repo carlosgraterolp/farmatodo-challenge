@@ -405,7 +405,6 @@ export default function CheckoutPage() {
           </motion.div>
         </div>
       </div>
-      </div>
     </>
     );
   }
