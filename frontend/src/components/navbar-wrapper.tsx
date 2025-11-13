@@ -13,9 +13,18 @@ import {
   MobileNavMenu,
   NavbarLogo,
 } from "@/components/ui/resizable-navbar";
+import {
+  IconShoppingCart,
+  IconSun,
+  IconMoon,
+  IconPrescription,
+  IconShoppingBag,
+} from "@tabler/icons-react";
+import { useTheme } from "@/components/theme-provider";
 
 export function NavbarWrapper() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartCount, setCartCount] = useState(0);
@@ -31,7 +40,10 @@ export function NavbarWrapper() {
       if (cart) {
         const items = JSON.parse(cart);
         // Count total items (sum of quantities)
-        const total = items.reduce((sum: number, item: any) => sum + item.quantity, 0);
+        const total = items.reduce(
+          (sum: number, item: any) => sum + item.quantity,
+          0
+        );
         setCartCount(total);
       } else {
         setCartCount(0);
@@ -65,8 +77,15 @@ export function NavbarWrapper() {
 
   const navItems = [
     {
-      name: "Productos",
+      name: "",
       link: "/tienda",
+      icon: <IconShoppingBag />,
+    },
+    {
+      name: "",
+      link: "/cart",
+      icon: <IconShoppingCart />,
+      count: cartCount,
     },
   ];
 
@@ -75,34 +94,33 @@ export function NavbarWrapper() {
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
-          <Link className="font-bold" href="/">
-            Farma
-          </Link>
-          <NavItems items={navItems} />
+          <NavbarLogo icon={<IconPrescription />} text="Farma" href="/" />
+
           <div className="flex items-center gap-4">
-            <Link href="/cart" className="relative">
-              <span className="text-2xl">🛒</span>
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-            <button
-              onClick={handleAuth}
-              className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+            <NavItems items={navItems} />
+            <NavbarButton
+              as="button"
+              variant="secondary"
+              onClick={toggleTheme}
+              className="p-2"
+              aria-label="Toggle theme"
             >
+              {theme === "dark" ? (
+                <IconSun className="h-5 w-5" />
+              ) : (
+                <IconMoon className="h-5 w-5" />
+              )}
+            </NavbarButton>
+            <NavbarButton as="button" variant="primary" onClick={handleAuth}>
               {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
-            </button>
+            </NavbarButton>
           </div>
         </NavBody>
 
         {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
-            <Link className="font-bold" href="/">
-              Farma
-            </Link>
+            <NavbarLogo icon={<IconPrescription />} text="Farma" href="/" />
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -118,28 +136,48 @@ export function NavbarWrapper() {
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-slate-600 dark:text-slate-300"
+                className="relative flex items-center gap-2 text-slate-600 dark:text-slate-300"
               >
-                <span className="block">{item.name}</span>
+                {item.icon && <span className="text-2xl">{item.icon}</span>}
+                {item.name && <span className="block">{item.name}</span>}
+                {item.count !== undefined && item.count > 0 && (
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
+                    {item.count}
+                  </span>
+                )}
               </Link>
             ))}
-            <Link
-              href="/cart"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="relative flex items-center gap-2 text-slate-600 dark:text-slate-300"
+            <NavbarButton
+              as="button"
+              variant="secondary"
+              onClick={() => {
+                toggleTheme();
+              }}
+              className="w-full flex items-center justify-center gap-2"
             >
-              <span className="text-2xl">🛒</span>
-              <span>Carrito ({cartCount})</span>
-            </Link>
-            <button
+              {theme === "dark" ? (
+                <>
+                  <IconSun className="h-5 w-5" />
+                  <span>Modo claro</span>
+                </>
+              ) : (
+                <>
+                  <IconMoon className="h-5 w-5" />
+                  <span>Modo oscuro</span>
+                </>
+              )}
+            </NavbarButton>
+            <NavbarButton
+              as="button"
+              variant="primary"
               onClick={() => {
                 setIsMobileMenuOpen(false);
                 handleAuth();
               }}
-              className="w-full rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+              className="w-full"
             >
               {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
-            </button>
+            </NavbarButton>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>

@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { IconMenu2, IconX } from "@tabler/icons-react";
+import Link from "next/link";
 import {
   motion,
   AnimatePresence,
@@ -25,6 +26,8 @@ interface NavItemsProps {
   items: {
     name: string;
     link: string;
+    icon?: React.ReactNode;
+    count?: number;
   }[];
   className?: string;
   onItemClick?: () => void;
@@ -116,10 +119,10 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <motion.div
+    <div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "hidden flex-row items-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
         className
       )}
     >
@@ -137,10 +140,27 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
               className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
             />
           )}
-          <span className="relative z-20">{item.name}</span>
+          <span className="relative z-20 flex items-center gap-2">
+            {item.icon && (
+              <span className="relative text-2xl">
+                {item.icon}
+                {item.count !== undefined && item.count > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
+                    {item.count}
+                  </span>
+                )}
+              </span>
+            )}
+            {item.name}
+            {!item.icon && item.count !== undefined && item.count > 0 && (
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
+                {item.count}
+              </span>
+            )}
+          </span>
         </a>
       ))}
-    </motion.div>
+    </div>
   );
 };
 
@@ -229,20 +249,43 @@ export const MobileNavToggle = ({
   );
 };
 
-export const NavbarLogo = () => {
+interface NavbarLogoProps {
+  icon?: React.ReactNode;
+  text?: string;
+  href?: string;
+  className?: string;
+}
+
+export const NavbarLogo = ({
+  icon,
+  text = "Farma",
+  href = "/",
+  className,
+}: NavbarLogoProps) => {
+  // Primary variant styles from NavbarButton
+  const primaryVariantStyles =
+    "px-2 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer inline-block text-center shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]";
+
   return (
-    <a
-      href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+    <Link
+      href={href}
+      className={cn(
+        "relative z-20 flex items-center space-x-2 px-2 py-1 text-lg font-bold text-black dark:text-white cursor-pointer",
+        className
+      )}
     >
-      <img
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
-      />
-      <span className="font-medium text-black dark:text-white">Startup</span>
-    </a>
+      {icon && (
+        <span
+          className={cn(
+            "text-2xl flex items-center justify-center",
+            primaryVariantStyles
+          )}
+        >
+          {icon}
+        </span>
+      )}
+      <span className="font-bold">{text}</span>
+    </Link>
   );
 };
 
