@@ -35,7 +35,7 @@ public class TransactionLog {
     private String message;
 
     @Lob
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String payload; // JSON opcional
 
     @Column(nullable = false)
