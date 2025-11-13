@@ -33,8 +33,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    // DB en runtime: PostgreSQL (GCP)
+    
+    // PostgreSQL database driver
     runtimeOnly 'org.postgresql:postgresql'
+    
+    // Google Cloud SQL connector for Cloud Run
+    implementation 'com.google.cloud.sql:postgres-socket-factory:1.18.1'
+    
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

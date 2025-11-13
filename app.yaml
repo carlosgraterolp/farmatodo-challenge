@@ -1,0 +1,67 @@
+# Google App Engine configuration
+# For deploying to App Engine Flexible Environment
+
+runtime: custom
+env: flex
+
+# Service configuration
+service: default
+
+# Scaling configuration
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 10
+  cool_down_period_sec: 120
+  cpu_utilization:
+    target_utilization: 0.6
+
+# Resources
+resources:
+  cpu: 1
+  memory_gb: 2
+  disk_size_gb: 10
+
+# Health checks
+liveness_check:
+  path: "/actuator/health"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 4
+  success_threshold: 2
+
+readiness_check:
+  path: "/actuator/health"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
+
+# Environment variables
+env_variables:
+  SPRING_PROFILES_ACTIVE: "gcp"
+  APP_API_KEY: "your-api-key-here"
+  ENCRYPTION_SECRET: "1234567890123456"
+  TOKENIZATION_REJECTION_PERCENTAGE: "0"
+  PAYMENT_REJECTION_PERCENTAGE: "35"
+  PAYMENT_MAX_RETRIES: "3"
+  PRODUCT_MIN_STOCK: "0"
+  SPRING_H2_CONSOLE_ENABLED: "false"
+  
+  # Database configuration (use Secret Manager for production)
+  DB_URL: "jdbc:postgresql://CLOUD_SQL_CONNECTION_NAME/farmatodo"
+  DB_USER: "your-db-user"
+  DB_PASS: "your-db-password"
+
+# Network
+network:
+  forwarded_ports:
+    - 8080
+
+# VPC connector (if using Cloud SQL private IP)
+# vpc_access_connector:
+#   name: "projects/YOUR_PROJECT_ID/locations/YOUR_REGION/connectors/YOUR_CONNECTOR"
+
+# Beta settings for Cloud SQL
+# beta_settings:
+#   cloud_sql_instances: "YOUR_PROJECT_ID:YOUR_REGION:YOUR_INSTANCE_NAME"

@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: farmatodo-backend
+  labels:
+    app: farmatodo-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: farmatodo-backend
+  template:
+    metadata:
+      labels:
+        app: farmatodo-backend
+    spec:
+      containers:
+      - name: backend
+        image: gcr.io/YOUR_PROJECT_ID/farmatodo-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "gcp"
+        - name: APP_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: api-key
+        - name: ENCRYPTION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: encryption-secret
+        - name: TOKENIZATION_REJECTION_PERCENTAGE
+          value: "0"
+        - name: PAYMENT_REJECTION_PERCENTAGE
+          value: "35"
+        - name: PAYMENT_MAX_RETRIES
+          value: "3"
+        - name: PRODUCT_MIN_STOCK
+          value: "0"
+        - name: SPRING_H2_CONSOLE_ENABLED
+          value: "false"
+        - name: DB_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: url
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: password
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: farmatodo-backend-service
+  labels:
+    app: farmatodo-backend
+spec:
+  type: LoadBalancer
+  selector:
+    app: farmatodo-backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+    name: http
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: farmatodo-backend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: farmatodo-backend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

@@ -32,9 +32,19 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain) throws ServletException, IOException {
 
     String path = request.getRequestURI();
-    log.debug("Processing request to: {}", path);
+    String method = request.getMethod();
+    log.debug("Processing request to: {} [{}]", path, method);
 
-    if ("/ping".equals(path) || "/error".equals(path) || path.startsWith("/h2-console")) {
+    // Allow OPTIONS requests (CORS preflight) to pass through
+    if ("OPTIONS".equals(method)) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    // Allow public endpoints without API key
+    if ("/ping".equals(path) || "/error".equals(path) || path.startsWith("/h2-console") 
+        || path.startsWith("/actuator") || path.startsWith("/auth/") 
+        || ("GET".equals(method) && path.startsWith("/products"))) {
       filterChain.doFilter(request, response);
       return;
     }
