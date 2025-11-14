@@ -1,3 +1,7 @@
+/**
+ * Home page - landing page with hero section and navigation
+ */
+
 "use client";
 import React, { useRef, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
@@ -15,12 +19,13 @@ export default function Home() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check authentication status on mount
   useEffect(() => {
-    // Check if customer is logged in
     const customer = localStorage.getItem("customer");
     setIsLoggedIn(!!customer);
   }, []);
 
+  /** Handle login/logout action */
   const handleAuth = () => {
     if (isLoggedIn) {
       localStorage.removeItem("customer");

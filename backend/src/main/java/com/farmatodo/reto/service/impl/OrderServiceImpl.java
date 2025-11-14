@@ -1,3 +1,6 @@
+/**
+ * Order service implementation - handles order creation and payment processing
+ */
 package com.farmatodo.reto.service.impl;
 
 import com.farmatodo.reto.dto.CreateOrderRequest;
@@ -23,7 +26,6 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
     private final PaymentAttemptRepository paymentAttemptRepository;
     private final PaymentService paymentService;
@@ -34,14 +36,12 @@ public class OrderServiceImpl implements OrderService {
     private int maxRetries;
 
     public OrderServiceImpl(OrderRepository orderRepository,
-            OrderItemRepository orderItemRepository,
             ProductRepository productRepository,
             PaymentAttemptRepository paymentAttemptRepository,
             PaymentService paymentService,
             NotificationService notificationService,
             TransactionLogService tlog) {
         this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
         this.paymentAttemptRepository = paymentAttemptRepository;
         this.paymentService = paymentService;
@@ -49,10 +49,11 @@ public class OrderServiceImpl implements OrderService {
         this.tlog = tlog;
     }
 
+    /** Create order: validate products, calculate total, process payment with retries */
     @Override
     @Transactional
     public CreateOrderResponse createOrder(CreateOrderRequest req) {
-        // 1) Cargar productos y calcular total
+        // Step 1: Load products and calculate total
         Map<Long, Product> map = productRepository.findAllById(
                 req.items.stream().map(i -> i.productId).toList()).stream()
                 .collect(HashMap::new, (m, p) -> m.put(p.getId(), p), HashMap::putAll);
@@ -87,12 +88,12 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(total);
         order = orderRepository.save(order);
 
-        // Log: ORDER_CREATED
+        // Log order creation
         tlog.log(order.getTransactionUuid(), order.getId(),
                 TransactionLog.Event.ORDER_CREATED, "Order created",
                 "{\"customerId\":" + order.getCustomerId() + ",\"total\":" + order.getTotal() + "}");
 
-        // 2) Intentos de pago
+        // Step 2: Payment attempts with retries
         boolean approved = false;
         int attempts = 0;
         List<CreateOrderResponse.PaymentAttemptView> views = new ArrayList<>();

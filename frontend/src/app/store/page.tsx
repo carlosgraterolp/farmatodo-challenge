@@ -1,3 +1,7 @@
+/**
+ * Store page - displays product catalog with search functionality
+ */
+
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -7,38 +11,27 @@ import { Input } from "@/components/ui/input";
 import { IconSearch } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { Product } from "@/types";
+import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
+import { API_BASE_URL } from "@/constants";
+import { ROUTES } from "@/constants";
 
 export default function StorePage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [customerId, setCustomerId] = useState<number | null>(null);
+  const { addToCart } = useCart();
+  const { isAuthenticated, loading: authLoading, mounted: authMounted } = useAuth();
 
+  /** Fetch products from API with optional search query */
   const fetchProducts = useCallback(async (query: string) => {
     setLoading(true);
     const startTime = Date.now();
 
     try {
-      // Fetch all products with optional search query
-      const url = `${
-        process.env.NEXT_PUBLIC_API_BASE_URL
-      }/products?q=${encodeURIComponent(query)}`;
-
+      const url = `${API_BASE_URL}/products?q=${encodeURIComponent(query)}`;
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
@@ -60,129 +53,92 @@ export default function StorePage() {
     }
   }, []);
 
+  // Redirect to auth if not authenticated, then load products
   useEffect(() => {
-    // Get customer info from localStorage
-    const customerData = localStorage.getItem("customer");
-    if (customerData) {
-      const customer = JSON.parse(customerData);
-      setCustomerId(customer.id);
-    } else {
-      // Redirect to auth if no customer logged in
-      router.push("/auth");
+    if (authMounted && !isAuthenticated) {
+      router.push(ROUTES.AUTH);
       return;
     }
 
-    // Load cart from localStorage
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+    if (authMounted && isAuthenticated) {
+      fetchProducts("");
     }
+  }, [router, fetchProducts, isAuthenticated, authMounted]);
 
-    // Load products
-    fetchProducts("");
-  }, [router, fetchProducts]);
-
-  // Debounced search effect
+  // Debounced search - fetch products 300ms after user stops typing
   useEffect(() => {
+    if (!isAuthenticated) return;
+
     const timeoutId = setTimeout(() => {
       fetchProducts(searchQuery);
-    }, 300); // 300ms delay
+    }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery, fetchProducts]);
+  }, [searchQuery, fetchProducts, isAuthenticated]);
 
-  const addToCart = (product: Product, quantity: number) => {
+  /** Add product to cart with validation */
+  const handleAddToCart = (product: Product, quantity: number) => {
     if (quantity <= 0 || quantity > product.stock) {
       alert(`Por favor selecciona una cantidad válida (1-${product.stock})`);
       return;
     }
-
-    setCart((prevCart) => {
-      const existingItem = prevCart.find(
-        (item) => item.product.id === product.id
-      );
-      let updatedCart;
-      if (existingItem) {
-        updatedCart = prevCart.map((item) =>
-          item.product.id === product.id
-            ? {
-                ...item,
-                quantity: Math.min(item.quantity + quantity, product.stock),
-              }
-            : item
-        );
-      } else {
-        updatedCart = [...prevCart, { product, quantity }];
-      }
-      // Save to localStorage
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      return updatedCart;
-    });
+    addToCart(product, quantity);
   };
-
-  // Dispatch cart updated event after cart state changes
-  useEffect(() => {
-    // Use setTimeout to defer the event dispatch to after render completes
-    const timeoutId = setTimeout(() => {
-      window.dispatchEvent(new Event("cartUpdated"));
-    }, 0);
-    return () => clearTimeout(timeoutId);
-  }, [cart]);
 
   return (
     <>
-      <AuroraBackground className="overflow-hidden -z-10" />
+      <AuroraBackground className="-z-10 overflow-hidden" />
       <div className="relative min-h-screen">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500">
-              <IconSearch className="h-5 w-5" />
+          <div className="mb-8">
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500">
+                <IconSearch className="h-5 w-5" />
+              </div>
+              <Input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar productos..."
+                className="pl-10"
+              />
             </div>
-            <Input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar productos..."
-              className="pl-10"
-            />
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <AnimatePresence mode="popLayout">
+              {loading
+                ? [...Array(8)].map((_, index) => (
+                    <ProductCardSkeleton key={`skeleton-${index}`} />
+                  ))
+                : products.map((product, index) => (
+                    <motion.div
+                      key={product.id}
+                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                      transition={{
+                        duration: 0.7,
+                        ease: [0.4, 0, 0.2, 1],
+                        delay: index * 0.08,
+                      }}
+                      layout
+                    >
+                      <ExpandableProductCard
+                        product={product}
+                        onAddToCart={handleAddToCart}
+                      />
+                    </motion.div>
+                  ))}
+            </AnimatePresence>
           </div>
         </div>
-
-        <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <AnimatePresence mode="popLayout">
-            {loading
-              ? [...Array(8)].map((_, index) => (
-                  <ProductCardSkeleton key={`skeleton-${index}`} />
-                ))
-              : products.map((product, index) => (
-                  <motion.div
-                    key={product.id}
-                    initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: -20 }}
-                    transition={{
-                      duration: 0.7,
-                      ease: [0.4, 0, 0.2, 1],
-                      delay: index * 0.08,
-                    }}
-                    layout
-                  >
-                    <ExpandableProductCard
-                      product={product}
-                      onAddToCart={addToCart}
-                    />
-                  </motion.div>
-                ))}
-          </AnimatePresence>
-        </div>
-      </div>
       </div>
     </>
   );
 }
 
-// Skeleton loader component matching the collapsed product card size
+/** Skeleton loader component for product cards during loading */
 function ProductCardSkeleton() {
   return (
     <motion.div

@@ -1,3 +1,6 @@
+/**
+ * Product service implementation - handles product search and logging
+ */
 package com.farmatodo.reto.service.impl;
 
 import com.farmatodo.reto.entity.Product;
@@ -27,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
         this.searchLogRepository = searchLogRepository;
     }
 
+    /** Search products by name (case-insensitive) with minimum stock filter */
     @Override
     public List<Product> search(String q, Long customerId) {
         String term = Objects.requireNonNullElse(q, "").trim();
@@ -35,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
                 .findByNameContainingIgnoreCaseAndStockGreaterThanEqual(term, minStock);
     }
 
+    /** Asynchronously log search term for analytics */
     @Async
     void logAsync(String term, Long customerId) {
         ProductSearchLog log = new ProductSearchLog();

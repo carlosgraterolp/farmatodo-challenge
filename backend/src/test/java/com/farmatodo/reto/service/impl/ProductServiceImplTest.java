@@ -42,7 +42,6 @@ class ProductServiceImplTest {
     void search_whenTermMatches_shouldReturnProducts() {
         // Arrange
         Product product1 = createProduct(1L, "Aspirin", 10);
-        Product product2 = createProduct(2L, "Ibuprofen", 5);
         
         when(productRepository.findByNameContainingIgnoreCaseAndStockGreaterThanEqual("asp", 0))
                 .thenReturn(List.of(product1));

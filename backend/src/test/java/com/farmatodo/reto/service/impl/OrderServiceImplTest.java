@@ -31,9 +31,6 @@ class OrderServiceImplTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private OrderItemRepository orderItemRepository;
-
-    @Mock
     private ProductRepository productRepository;
 
     @Mock
@@ -209,6 +206,7 @@ class OrderServiceImplTest {
         orderService.createOrder(testRequest);
 
         // Assert
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<Iterable<Product>> captor = ArgumentCaptor.forClass(Iterable.class);
         verify(productRepository).saveAll(captor.capture());
         

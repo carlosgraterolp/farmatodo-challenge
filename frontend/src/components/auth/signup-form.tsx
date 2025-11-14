@@ -1,3 +1,7 @@
+/**
+ * Signup form component for customer registration
+ */
+
 "use client";
 
 import React, { useState } from "react";
@@ -6,9 +10,13 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { registerCustomer } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/constants";
 
+/** Registration form with customer details */
 export default function SignupForm({ onToggle }: { onToggle: () => void }) {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -16,11 +24,11 @@ export default function SignupForm({ onToggle }: { onToggle: () => void }) {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /** Handle form submission and register new customer */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -42,15 +50,11 @@ export default function SignupForm({ onToggle }: { onToggle: () => void }) {
         password,
       });
 
-      // Store customer in localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem("customer", JSON.stringify(customer));
-      }
-
+      login(customer);
       setSuccess("Cuenta creada correctamente. Redirigiendo…");
 
       setTimeout(() => {
-        router.push("/");
+        router.push(ROUTES.HOME);
       }, 800);
     } catch (err) {
       console.error(err);
@@ -198,3 +202,4 @@ const LabelInputContainer = ({
     </div>
   );
 };
+
