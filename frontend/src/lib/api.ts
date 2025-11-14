@@ -1,9 +1,10 @@
-// src/lib/api.ts
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+/**
+ * API client functions for backend communication
+ */
 
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY ?? "SECRET123";
+import { API_BASE_URL, API_KEY } from "@/constants";
 
+/** Customer registration payload */
 export type CustomerPayload = {
   firstName: string;
   lastName: string;
@@ -13,6 +14,7 @@ export type CustomerPayload = {
   password: string;
 };
 
+/** Customer response from API */
 export type CustomerResponse = {
   id: number;
   firstName: string;
@@ -23,6 +25,7 @@ export type CustomerResponse = {
   createdAt: string;
 };
 
+/** Register a new customer */
 export async function registerCustomer(
   payload: CustomerPayload
 ): Promise<CustomerResponse> {
@@ -42,7 +45,7 @@ export async function registerCustomer(
         errorMessage = data.message;
       }
     } catch {
-      // ignore parse error
+      // Ignore JSON parse errors
     }
     throw new Error(errorMessage);
   }
@@ -50,11 +53,13 @@ export async function registerCustomer(
   return (await res.json()) as CustomerResponse;
 }
 
+/** Login payload */
 export type LoginPayload = {
   email: string;
   password: string;
 };
 
+/** Login existing customer */
 export async function loginCustomer(
   payload: LoginPayload
 ): Promise<CustomerResponse> {
@@ -74,7 +79,7 @@ export async function loginCustomer(
         errorMessage = data.message;
       }
     } catch {
-      // ignore parse error
+      // Ignore JSON parse errors
     }
     throw new Error(errorMessage);
   }

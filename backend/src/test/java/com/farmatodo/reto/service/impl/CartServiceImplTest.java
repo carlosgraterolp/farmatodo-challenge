@@ -6,14 +6,12 @@ import com.farmatodo.reto.dto.CreateOrderResponse;
 import com.farmatodo.reto.entity.Cart;
 import com.farmatodo.reto.entity.CartItem;
 import com.farmatodo.reto.entity.Product;
-import com.farmatodo.reto.repository.CartItemRepository;
 import com.farmatodo.reto.repository.CartRepository;
 import com.farmatodo.reto.repository.ProductRepository;
 import com.farmatodo.reto.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -32,9 +30,6 @@ class CartServiceImplTest {
 
     @Mock
     private CartRepository cartRepository;
-
-    @Mock
-    private CartItemRepository cartItemRepository;
 
     @Mock
     private ProductRepository productRepository;

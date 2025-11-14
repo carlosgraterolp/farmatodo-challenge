@@ -1,3 +1,7 @@
+/**
+ * Login form component for customer authentication
+ */
+
 "use client";
 
 import React, { useState } from "react";
@@ -6,16 +10,20 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { loginCustomer } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { ROUTES } from "@/constants";
 
+/** Login form with email and password fields */
 export default function LoginForm({ onToggle }: { onToggle: () => void }) {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /** Handle form submission and authenticate user */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -28,14 +36,8 @@ export default function LoginForm({ onToggle }: { onToggle: () => void }) {
     setLoading(true);
     try {
       const customer = await loginCustomer({ email, password });
-
-      // Store customer in localStorage
-      if (typeof window !== "undefined") {
-        localStorage.setItem("customer", JSON.stringify(customer));
-      }
-
-      // Redirect to landing page
-      router.push("/");
+      login(customer);
+      router.push(ROUTES.HOME);
     } catch (err) {
       console.error(err);
       setError(
@@ -132,3 +134,4 @@ const LabelInputContainer = ({
     </div>
   );
 };
+

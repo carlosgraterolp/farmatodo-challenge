@@ -1,3 +1,6 @@
+/**
+ * Cart service implementation - manages shopping cart operations
+ */
 package com.farmatodo.reto.service.impl;
 
 import com.farmatodo.reto.dto.CartDtos;
@@ -5,7 +8,6 @@ import com.farmatodo.reto.dto.CreateOrderRequest;
 import com.farmatodo.reto.entity.Cart;
 import com.farmatodo.reto.entity.CartItem;
 import com.farmatodo.reto.entity.Product;
-import com.farmatodo.reto.repository.CartItemRepository;
 import com.farmatodo.reto.repository.CartRepository;
 import com.farmatodo.reto.repository.ProductRepository;
 import com.farmatodo.reto.service.CartService;
@@ -20,20 +22,18 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
     private final OrderService orderService;
 
     public CartServiceImpl(CartRepository cartRepository,
-            CartItemRepository cartItemRepository,
             ProductRepository productRepository,
             OrderService orderService) {
         this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.orderService = orderService;
     }
 
+    /** Get or create cart for customer */
     @Override
     public CartDtos.View get(Long customerId) {
         Cart cart = cartRepository.findByCustomerId(customerId)
@@ -45,6 +45,7 @@ public class CartServiceImpl implements CartService {
         return toView(cart);
     }
 
+    /** Add or update item in cart */
     @Override
     @Transactional
     public CartDtos.View upsertItem(CartDtos.UpsertItemRequest req) {
@@ -58,7 +59,7 @@ public class CartServiceImpl implements CartService {
         if (p == null)
             throw new IllegalArgumentException("Producto no existe: " + req.productId);
 
-        // si existe el item, actualiza qty; si no, lo crea
+        // Update existing item quantity or create new item
         Optional<CartItem> existing = cart.getItems().stream()
                 .filter(i -> i.getProductId().equals(req.productId)).findFirst();
 
@@ -77,6 +78,7 @@ public class CartServiceImpl implements CartService {
         return toView(cart);
     }
 
+    /** Remove item from cart */
     @Override
     @Transactional
     public CartDtos.View removeItem(CartDtos.RemoveItemRequest req) {
@@ -87,6 +89,7 @@ public class CartServiceImpl implements CartService {
         return toView(cart);
     }
 
+    /** Clear all items from cart */
     @Override
     @Transactional
     public void clear(Long customerId) {
@@ -96,6 +99,7 @@ public class CartServiceImpl implements CartService {
         });
     }
 
+    /** Process checkout: create order and clear cart */
     @Override
     @Transactional
     public Object checkout(CartDtos.CheckoutRequest req) {
