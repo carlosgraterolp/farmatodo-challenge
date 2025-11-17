@@ -225,7 +225,7 @@ export default function CheckoutPage() {
             }}
           />
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Payment Form */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -233,20 +233,20 @@ export default function CheckoutPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:col-span-2"
           >
-            <div className="rounded-2xl bg-white p-6 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-zinc-800/80 dark:border dark:border-zinc-700/30">
-                  <IconCreditCard className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+            <div className="rounded-2xl bg-white p-4 sm:p-6 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50">
+              <div className="mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-neutral-100 dark:bg-zinc-800/80 dark:border dark:border-zinc-700/30">
+                  <IconCreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-neutral-600 dark:text-neutral-400" />
                 </div>
-                <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+                <h2 className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-neutral-100">
                   Información de pago
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                    <IconMapPin className="h-4 w-4" />
+                  <label className="mb-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                    <IconMapPin className="h-3 w-3 sm:h-4 sm:w-4" />
                     Dirección de entrega
                   </label>
                   <Input
@@ -255,13 +255,13 @@ export default function CheckoutPage() {
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="Ingresa tu dirección de entrega"
                     required
-                    className="w-full"
+                    className="w-full text-sm sm:text-base"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                    <IconCreditCard className="h-4 w-4" />
+                  <label className="mb-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                    <IconCreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
                     Número de tarjeta
                   </label>
                   <Input
@@ -273,17 +273,17 @@ export default function CheckoutPage() {
                     required
                     maxLength={19}
                     pattern="[0-9\s]{13,19}"
-                    className="w-full tracking-wider"
+                    className="w-full tracking-wider text-sm sm:text-base"
                   />
                   <p className="mt-1 pl-[14px] text-xs text-neutral-500 dark:text-neutral-400">
                     Formato: 4 dígitos seguidos de un espacio
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                      <IconCalendar className="h-4 w-4" />
+                    <label className="mb-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                      <IconCalendar className="h-3 w-3 sm:h-4 sm:w-4" />
                       Fecha de expiración
                     </label>
                     <Input
@@ -295,15 +295,15 @@ export default function CheckoutPage() {
                       required
                       maxLength={5}
                       pattern="(0[1-9]|1[0-2])\/[0-9]{2}"
-                      className="w-full"
+                      className="w-full text-sm sm:text-base"
                     />
                     <p className="mt-1 pl-[14px] text-xs text-neutral-500 dark:text-neutral-400">
                       Formato: MM/YY
                     </p>
                   </div>
                   <div>
-                    <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-                      <IconLock className="h-4 w-4" />
+                    <label className="mb-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+                      <IconLock className="h-3 w-3 sm:h-4 sm:w-4" />
                       CVV
                     </label>
                     <Input
@@ -317,7 +317,7 @@ export default function CheckoutPage() {
                       required
                       maxLength={4}
                       pattern="[0-9]{3,4}"
-                      className="w-full"
+                      className="w-full text-sm sm:text-base"
                     />
                     <p className="mt-1 pl-[14px] text-xs text-neutral-500 dark:text-neutral-400">
                       3 o 4 dígitos
@@ -342,15 +342,15 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={processing}
-                  className="w-full rounded-md bg-white px-6 py-4 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
+                  className="w-full rounded-md bg-white px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
                 >
                   {processing ? (
                     <span className="flex items-center justify-center gap-2">
-                      <IconLoader className="h-5 w-5 animate-spin" />
-                      Procesando pago...
+                      <IconLoader className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                      <span className="text-xs sm:text-sm">Procesando pago...</span>
                     </span>
                   ) : (
-                    `Pagar $${getTotalPrice(cart).toFixed(2)}`
+                    <span className="text-xs sm:text-sm">Pagar ${getTotalPrice(cart).toFixed(2)}</span>
                   )}
                 </button>
 

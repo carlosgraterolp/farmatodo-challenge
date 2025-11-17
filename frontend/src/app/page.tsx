@@ -106,23 +106,24 @@ export default function Home() {
   return (
     <div className="relative">
       <HeroParallax products={products} />
-      <div className="absolute top-625 left-0 w-full h-[40rem] flex items-center justify-center overflow-hidden z-[9999] pointer-events-none">
-        <div className="pointer-events-auto w-full h-full">
-          <MaskContainer
-            revealText={
-              <p className="mx-auto max-w-4xl text-center text-4xl font-bold text-slate-800 dark:text-white">
-                Compra tus productos farmacéuticos de forma rápida y segura.
-                Entrega a domicilio en toda Venezuela. ¡Tu salud más cerca, en
-                solo unos clics!
-              </p>
-            }
-            className="h-[40rem] w-full rounded-none border-0 text-white dark:text-black"
-          >
+      <div className="w-full h-[30rem] sm:h-[35rem] md:h-[40rem] flex items-center justify-center overflow-hidden">
+        <MaskContainer
+          revealText={
+            <p className="mx-auto max-w-4xl px-4 text-center text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-800 dark:text-white">
+              Compra tus productos farmacéuticos de forma rápida y segura.
+              Entrega a domicilio en toda Venezuela. ¡Tu salud más cerca, en
+              solo unos clics!
+            </p>
+          }
+          className="h-[30rem] sm:h-[35rem] md:h-[40rem] w-full rounded-none border-0 text-white dark:text-black"
+          revealSize={600}
+        >
+          <p className="px-4 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl">
             Descubre tu farmacia inteligente: consulta productos actualizados en
             tiempo real, añade al carrito, paga de forma segura y recibe tu
             compra directo en tu puerta. Gestiona pedidos, recibe notificaciones
-          </MaskContainer>
-        </div>
+          </p>
+        </MaskContainer>
       </div>
     </div>
   );

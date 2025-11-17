@@ -91,7 +91,8 @@ export function NavbarWrapper() {
     }
   };
 
-  const navItems = [
+  // Desktop nav items (icons only, no text)
+  const desktopNavItems = [
     {
       name: "",
       link: "/store",
@@ -99,6 +100,21 @@ export function NavbarWrapper() {
     },
     {
       name: "",
+      link: "/cart",
+      icon: <IconShoppingCart />,
+      count: cartCount,
+    },
+  ];
+
+  // Mobile nav items (with text labels)
+  const mobileNavItems = [
+    {
+      name: "Tienda",
+      link: "/store",
+      icon: <IconShoppingBag />,
+    },
+    {
+      name: "Carrito",
       link: "/cart",
       icon: <IconShoppingCart />,
       count: cartCount,
@@ -113,7 +129,7 @@ export function NavbarWrapper() {
           <NavbarLogo icon={<IconPrescription />} text="Farma" href="/" />
 
           <div className="flex items-center gap-4">
-            <NavItems items={navItems} />
+            <NavItems items={desktopNavItems} />
             <NavbarButton
               as="button"
               variant="secondary"
@@ -154,14 +170,14 @@ export function NavbarWrapper() {
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item, idx) => (
+            {mobileNavItems.map((item, idx) => (
               <Link
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative flex items-center gap-2 text-slate-600 dark:text-slate-300"
+                className="relative w-full flex items-center justify-center gap-2 text-slate-600 dark:text-slate-300 py-2 px-4 rounded-md hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
               >
-                {item.icon && <span className="text-2xl">{item.icon}</span>}
+                {item.icon && <span className="text-xl">{item.icon}</span>}
                 {item.name && <span className="block">{item.name}</span>}
                 {item.count !== undefined && item.count > 0 && (
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">

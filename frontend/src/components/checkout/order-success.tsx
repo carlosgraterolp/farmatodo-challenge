@@ -22,27 +22,27 @@ export const OrderSuccess: React.FC<OrderSuccessProps> = ({ orderDetails }) => {
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="rounded-2xl bg-white p-8 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50"
+      className="rounded-2xl bg-white p-4 sm:p-6 md:p-8 shadow-md dark:bg-zinc-900/95 dark:backdrop-blur-sm dark:border dark:border-zinc-800/50"
     >
-      <div className="mb-6 text-center">
+      <div className="mb-4 sm:mb-6 text-center">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30"
+          className="mx-auto mb-3 sm:mb-4 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30"
         >
           {orderDetails.status === "COMPLETED" ? (
-            <IconCheck className="h-10 w-10 text-green-600 dark:text-green-400" />
+            <IconCheck className="h-8 w-8 sm:h-10 sm:w-10 text-green-600 dark:text-green-400" />
           ) : (
-            <IconLoader className="h-10 w-10 animate-spin text-orange-600 dark:text-orange-400" />
+            <IconLoader className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-orange-600 dark:text-orange-400" />
           )}
         </motion.div>
-        <h2 className="mb-2 text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+        <h2 className="mb-2 text-xl sm:text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
           {orderDetails.status === "COMPLETED"
             ? "¡Pedido realizado con éxito!"
             : "Pedido en proceso"}
         </h2>
-        <p className="text-neutral-600 dark:text-neutral-400">
+        <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
           {orderDetails.status === "COMPLETED"
             ? "Tu pedido ha sido confirmado y procesado correctamente"
             : "Estamos procesando tu pedido, por favor espera..."}
@@ -69,10 +69,10 @@ export const OrderSuccess: React.FC<OrderSuccessProps> = ({ orderDetails }) => {
               </span>
             </div>
             <div className="mt-4 flex items-center justify-between border-t border-neutral-200 pt-4 dark:border-neutral-700">
-              <span className="text-lg font-bold text-neutral-800 dark:text-neutral-100">
+              <span className="text-base sm:text-lg font-bold text-neutral-800 dark:text-neutral-100">
                 Total:
               </span>
-              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+              <span className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-neutral-100">
                 ${orderDetails.total}
               </span>
             </div>
@@ -134,9 +134,9 @@ export const OrderSuccess: React.FC<OrderSuccessProps> = ({ orderDetails }) => {
           </p>
           <button
             onClick={() => router.push(ROUTES.STORE)}
-            className="mt-4 rounded-md bg-white px-6 py-3 text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
+            className="mt-4 w-full sm:w-auto rounded-md bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-bold text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] transition duration-200 hover:-translate-y-0.5 dark:bg-zinc-800/90 dark:text-white dark:backdrop-blur-sm dark:border dark:border-zinc-700/50"
           >
-            <IconShoppingBag className="mr-2 inline h-4 w-4" />
+            <IconShoppingBag className="mr-2 inline h-3 w-3 sm:h-4 sm:w-4" />
             Volver a la tienda
           </button>
         </div>
