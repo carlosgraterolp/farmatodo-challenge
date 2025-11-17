@@ -17,22 +17,28 @@ export const MaskContainer = ({
   className?: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePosition, setMousePosition] = useState<any>({ x: null, y: null });
+  const [mousePosition, setMousePosition] = useState<{
+    x: number | null;
+    y: number | null;
+  }>({ x: null, y: null });
   const [isMobile, setIsMobile] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1024);
-  const containerRef = useRef<any>(null);
-  
-  const updateMousePosition = (e: any) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const updateMousePosition = (e: MouseEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
-  const updateTouchPosition = (e: any) => {
+  const updateTouchPosition = (e: TouchEvent) => {
     if (!containerRef.current) return;
     const touch = e.touches[0] || e.changedTouches[0];
     const rect = containerRef.current.getBoundingClientRect();
-    setMousePosition({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
+    setMousePosition({
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top,
+    });
   };
 
   useEffect(() => {
@@ -43,36 +49,45 @@ export const MaskContainer = ({
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    
+
     if (!containerRef.current) return;
-    
+
     containerRef.current.addEventListener("mousemove", updateMousePosition);
     containerRef.current.addEventListener("touchmove", updateTouchPosition);
     containerRef.current.addEventListener("touchstart", updateTouchPosition);
-    
+
     return () => {
       window.removeEventListener("resize", checkMobile);
       if (containerRef.current) {
-        containerRef.current.removeEventListener("mousemove", updateMousePosition);
-        containerRef.current.removeEventListener("touchmove", updateTouchPosition);
-        containerRef.current.removeEventListener("touchstart", updateTouchPosition);
+        containerRef.current.removeEventListener(
+          "mousemove",
+          updateMousePosition
+        );
+        containerRef.current.removeEventListener(
+          "touchmove",
+          updateTouchPosition
+        );
+        containerRef.current.removeEventListener(
+          "touchstart",
+          updateTouchPosition
+        );
       }
     };
   }, []);
-  
+
   // Make revealSize responsive
-  const responsiveRevealSize = isMobile 
-    ? Math.min(revealSize * 0.6, 300) 
-    : windowWidth < 1024 
-    ? revealSize * 0.8 
+  const responsiveRevealSize = isMobile
+    ? Math.min(revealSize * 0.6, 300)
+    : windowWidth < 1024
+    ? revealSize * 0.8
     : revealSize;
-  
-  let maskSize = isHovered ? responsiveRevealSize : size;
+
+  const maskSize = isHovered ? responsiveRevealSize : size;
 
   return (
     <motion.div
       ref={containerRef}
-      className={cn("relative h-full z-[9999]", className)}
+      className={cn("relative h-full z-9999", className)}
       animate={{
         backgroundColor: isHovered ? "var(--slate-900)" : "var(--white)",
       }}
@@ -83,11 +98,12 @@ export const MaskContainer = ({
       <motion.div
         className="absolute flex h-full w-full items-center justify-center bg-black text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl [mask-image:url(/mask.svg)] [mask-repeat:no-repeat] [mask-size:20px] sm:[mask-size:30px] md:[mask-size:40px] dark:bg-white"
         animate={{
-          maskPosition: mousePosition.x !== null && mousePosition.y !== null
-            ? `${mousePosition.x - maskSize / 2}px ${
-                mousePosition.y - maskSize / 2
-              }px`
-            : "50% 50%",
+          maskPosition:
+            mousePosition.x !== null && mousePosition.y !== null
+              ? `${mousePosition.x - maskSize / 2}px ${
+                  mousePosition.y - maskSize / 2
+                }px`
+              : "50% 50%",
           maskSize: `${maskSize}px`,
         }}
         transition={{

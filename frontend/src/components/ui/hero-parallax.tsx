@@ -1,5 +1,8 @@
 "use client";
+
 import React from "react";
+import Image from "next/image";
+
 import {
   motion,
   useScroll,
@@ -55,7 +58,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[150vh] pt-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[300vh] pt-40 pb-0 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d] z-10"
     >
       <Header />
       <motion.div
@@ -136,12 +139,12 @@ export const ProductCard = ({
       className="group/product h-96 w-[30rem] relative shrink-0"
     >
       <a href={product.link} className="block group-hover/product:shadow-2xl ">
-        <img
+        <Image
           src={product.thumbnail}
-          height="600"
-          width="600"
-          className="object-cover object-left-top absolute h-full w-full inset-0"
+          fill
+          className="object-cover object-left-top"
           alt={product.title}
+          unoptimized
         />
       </a>
       <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none"></div>

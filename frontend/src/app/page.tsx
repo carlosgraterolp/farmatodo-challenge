@@ -104,9 +104,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative">
+    <>
       <HeroParallax products={products} />
-      <div className="w-full h-[30rem] sm:h-[35rem] md:h-[40rem] flex items-center justify-center overflow-hidden">
+      <div className="w-full h-[30rem] sm:h-[35rem] md:h-[40rem] flex items-center justify-center overflow-hidden -mt-[55vh]">
         <MaskContainer
           revealText={
             <p className="mx-auto max-w-4xl px-4 text-center text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-800 dark:text-white">
@@ -125,6 +125,6 @@ export default function Home() {
           </p>
         </MaskContainer>
       </div>
-    </div>
+    </>
   );
 }
