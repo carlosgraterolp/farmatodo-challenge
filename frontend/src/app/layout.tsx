@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavbarWrapper } from "@/components/navbar-wrapper";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/auth-provider";
 import { CenteredWithLogo } from "@/components/ui/footer";
 
 const geistSans = Geist({
@@ -31,9 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <NavbarWrapper />
-          <main className="min-h-screen">{children}</main>
-          <CenteredWithLogo />
+          <AuthProvider>
+            <NavbarWrapper />
+            <main className="min-h-screen">{children}</main>
+            <CenteredWithLogo />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

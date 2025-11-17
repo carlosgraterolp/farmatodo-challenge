@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Navbar,
   NavBody,
@@ -21,40 +21,58 @@ import {
   IconShoppingBag,
 } from "@tabler/icons-react";
 import { useTheme } from "@/components/theme-provider";
+import { useAuth } from "@/hooks/useAuth";
+import { useCart } from "@/hooks/useCart";
+import { getTotalItems } from "@/utils/cart";
+import { ROUTES } from "@/constants";
 
 export function NavbarWrapper() {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated, logout, mounted: authMounted } = useAuth();
+  const { cart, clearCart } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  useEffect(() => {
-    // Check auth status
-    const customer = localStorage.getItem("customer");
-    setIsLoggedIn(!!customer);
+  // Protected routes that require authentication
+  const protectedRoutes = [ROUTES.STORE, ROUTES.CART, ROUTES.CHECKOUT] as const;
+  const isProtectedRoute = protectedRoutes.includes(pathname as (typeof protectedRoutes)[number]);
+  
+  // Determine default button text based on route
+  // On protected routes, user must be authenticated, so show "Cerrar sesión"
+  // On public routes, show "Iniciar sesión" as default
+  const getDefaultButtonText = () => {
+    if (!authMounted) {
+      return isProtectedRoute ? "Cerrar sesión" : "Iniciar sesión";
+    }
+    return isAuthenticated ? "Cerrar sesión" : "Iniciar sesión";
+  };
 
-    // Update cart count
+  // Update cart count from cart state
+  useEffect(() => {
+    setCartCount(getTotalItems(cart));
+  }, [cart]);
+
+  // Listen for storage changes (when cart is updated in other tabs/windows)
+  useEffect(() => {
     const updateCartCount = () => {
-      const cart = localStorage.getItem("cart");
-      if (cart) {
-        const items = JSON.parse(cart);
-        // Count total items (sum of quantities)
-        const total = items.reduce(
-          (sum: number, item: any) => sum + item.quantity,
-          0
-        );
-        setCartCount(total);
-      } else {
-        setCartCount(0);
+      if (typeof window !== "undefined") {
+        const cartData = localStorage.getItem("cart");
+        if (cartData) {
+          const items = JSON.parse(cartData);
+          const total = items.reduce(
+            (sum: number, item: any) => sum + item.quantity,
+            0
+          );
+          setCartCount(total);
+        } else {
+          setCartCount(0);
+        }
       }
     };
 
-    updateCartCount();
-
-    // Listen for storage changes (when cart is updated in other tabs/windows)
     window.addEventListener("storage", updateCartCount);
-    // Custom event for same-tab updates
     window.addEventListener("cartUpdated", updateCartCount);
 
     return () => {
@@ -64,11 +82,9 @@ export function NavbarWrapper() {
   }, []);
 
   const handleAuth = () => {
-    if (isLoggedIn) {
-      localStorage.removeItem("customer");
-      localStorage.removeItem("cart");
-      setIsLoggedIn(false);
-      setCartCount(0);
+    if (isAuthenticated) {
+      logout();
+      clearCart();
       router.push("/");
     } else {
       router.push("/auth");
@@ -111,8 +127,15 @@ export function NavbarWrapper() {
                 <IconMoon className="h-5 w-5" />
               )}
             </NavbarButton>
-            <NavbarButton as="button" variant="primary" onClick={handleAuth}>
-              {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
+            <NavbarButton
+              as="button"
+              variant="primary"
+              onClick={handleAuth}
+              disabled={!authMounted}
+              aria-label={authMounted ? undefined : "Cargando autenticación"}
+              className={!authMounted ? "opacity-50" : ""}
+            >
+              {getDefaultButtonText()}
             </NavbarButton>
           </div>
         </NavBody>
@@ -174,9 +197,11 @@ export function NavbarWrapper() {
                 setIsMobileMenuOpen(false);
                 handleAuth();
               }}
-              className="w-full"
+              className={`w-full ${!authMounted ? "opacity-50" : ""}`}
+              disabled={!authMounted}
+              aria-label={authMounted ? undefined : "Cargando autenticación"}
             >
-              {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
+              {getDefaultButtonText()}
             </NavbarButton>
           </MobileNavMenu>
         </MobileNav>
