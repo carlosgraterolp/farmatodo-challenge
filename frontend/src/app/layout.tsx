@@ -5,6 +5,7 @@ import { NavbarWrapper } from "@/components/navbar-wrapper";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
 import { CenteredWithLogo } from "@/components/ui/footer";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +34,12 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <AuthProvider>
-            <NavbarWrapper />
-            <main className="min-h-screen">{children}</main>
-            <CenteredWithLogo />
+            <AuroraBackground className="-z-10" />
+            <div className="relative z-0">
+              <NavbarWrapper />
+              <main className="min-h-screen">{children}</main>
+              <CenteredWithLogo />
+            </div>
           </AuthProvider>
         </ThemeProvider>
       </body>
